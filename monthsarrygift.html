@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>♡ Beloved</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#fff5f7;--bg2:#ffe8ef;--bg3:#ffd6e7;
+  --card:rgba(255,255,255,0.75);--card2:rgba(255,240,248,0.6);
+  --text:#4a2040;--text2:#8b4a6b;--text3:#c4789a;
+  --accent:#e8739a;--accent2:#f4a0be;--accent3:#fce4ec;
+  --glass:rgba(255,255,255,0.3);--glassborder:rgba(255,255,255,0.45);
+  --shadow:0 8px 32px rgba(232,115,154,0.15);
+  --shadow2:0 4px 16px rgba(232,115,154,0.2);
+  --font-script:'Dancing Script',cursive;
+  --font-serif:'Playfair Display',serif;
+  --font-sans:'Inter',sans-serif;
+  --tr:0.35s cubic-bezier(0.4,0,0.2,1);
+}
+[data-theme=dark]{
+  --bg:#1a0d14;--bg2:#2d1220;--bg3:#3d1a2c;
+  --card:rgba(45,18,32,0.85);--card2:rgba(61,26,44,0.7);
+  --text:#f8e4ef;--text2:#d4a0be;--text3:#a06080;
+  --accent:#e8739a;--accent2:#c45a80;--accent3:#4a1830;
+  --glass:rgba(45,18,32,0.45);--glassborder:rgba(232,115,154,0.2);
+  --shadow:0 8px 32px rgba(0,0,0,0.45);--shadow2:0 4px 16px rgba(0,0,0,0.3);
+}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background var(--tr),color var(--tr)}
+#app{position:relative;min-height:100vh}
+
+/* PARTICLES */
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.heart-particle{position:absolute;animation:floatUp linear infinite;opacity:0;pointer-events:none}
+@keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg);opacity:0.6}100%{transform:translateY(-20px) rotate(360deg);opacity:0}}
+.sparkle{position:absolute;width:4px;height:4px;background:var(--accent);border-radius:50%;animation:sparkle 2s ease-in-out infinite;pointer-events:none}
+@keyframes sparkle{0%,100%{transform:scale(0);opacity:0}50%{transform:scale(1);opacity:1}}
+
+/* LOADING */
+#loading{position:fixed;inset:0;background:linear-gradient(135deg,#ffe0ec,#fce4ec,#f8bbd9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.8s ease}
+#loading.fade-out{opacity:0;pointer-events:none}
+.loading-heart{font-size:60px;animation:heartbeat 1s ease-in-out infinite}
+@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.loading-quote{font-family:var(--font-script);font-size:22px;color:#c45a80;margin-top:20px;text-align:center;padding:0 20px;animation:fadeIn 2s ease}
+.loading-bar{width:200px;height:3px;background:rgba(255,255,255,0.4);border-radius:10px;margin-top:30px;overflow:hidden}
+.loading-progress{height:100%;background:linear-gradient(90deg,#e8739a,#f4a0be);border-radius:10px;animation:progress 2.5s ease forwards}
+@keyframes progress{from{width:0}to{width:100%}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);background:var(--glass);border-bottom:1px solid var(--glassborder);transition:all var(--tr)}
+.nav-logo{font-family:var(--font-script);font-size:26px;color:var(--accent);font-weight:700}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-btn{padding:7px 14px;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;border-radius:20px;transition:all 0.2s;font-family:var(--font-sans)}
+.nav-btn:hover,.nav-btn.active{background:var(--accent);color:#fff}
+.nav-right{display:flex;gap:8px;align-items:center}
+.icon-btn{width:36px;height:36px;border:none;background:var(--glass);border:1px solid var(--glassborder);color:var(--text2);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.2s;backdrop-filter:blur(10px)}
+.icon-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:scale(1.05)}
+
+/* PAGES */
+.page{display:none;padding-top:70px;min-height:100vh;position:relative;z-index:1}
+.page.active{display:block}
+#landing{display:none;padding-top:0}
+#landing.active{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:80px 20px 40px}
+
+/* LANDING */
+.landing-badge{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--glassborder);backdrop-filter:blur(10px);padding:8px 18px;border-radius:30px;font-size:13px;color:var(--text2);margin-bottom:30px;animation:fadeIn 1s ease}
+.landing-title{font-family:var(--font-serif);font-size:clamp(42px,8vw,80px);line-height:1.1;color:var(--text);margin-bottom:16px;animation:fadeIn 1.2s ease}
+.landing-title span{color:var(--accent);font-style:italic}
+.landing-sub{font-size:18px;color:var(--text2);margin-bottom:40px;max-width:500px;line-height:1.6;animation:fadeIn 1.4s ease}
+.countdown-wrapper{background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--glassborder);border-radius:24px;padding:30px 40px;box-shadow:var(--shadow);margin-bottom:40px;animation:fadeIn 1.6s ease}
+.countdown-label{font-size:13px;color:var(--text3);margin-bottom:16px;letter-spacing:2px;text-transform:uppercase}
+.countdown{display:flex;gap:20px;justify-content:center}
+.countdown-unit{text-align:center}
+.countdown-num{font-size:clamp(32px,5vw,48px);font-weight:600;color:var(--accent);line-height:1;display:block;font-family:var(--font-serif)}
+.countdown-name{font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+.countdown-sep{font-size:40px;color:var(--accent2);align-self:start;padding-top:6px;opacity:0.5}
+.cta-btn{background:linear-gradient(135deg,var(--accent),#c45a80);color:#fff;border:none;padding:16px 40px;border-radius:30px;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 20px rgba(232,115,154,0.4);font-family:var(--font-sans);animation:fadeIn 1.8s ease}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(232,115,154,0.5)}
+.music-hint{font-size:12px;color:var(--text3);margin-top:16px;animation:fadeIn 2s ease}
+
+/* GALLERY */
+.gallery-header{padding:30px 20px 0;text-align:center}
+.section-title{font-family:var(--font-serif);font-size:36px;color:var(--text);margin-bottom:8px}
+.section-sub{color:var(--text2);font-size:16px;margin-bottom:20px}
+.gallery-controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+.add-memory-btn{background:var(--glass);border:1.5px dashed var(--accent2);color:var(--accent);padding:12px 24px;border-radius:20px;cursor:pointer;font-size:14px;transition:all 0.2s;backdrop-filter:blur(10px)}
+.add-memory-btn:hover{background:var(--accent3);border-color:var(--accent)}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:28px;padding:30px 20px}
+.polaroid{background:#fff;padding:14px 14px 44px;border-radius:4px;box-shadow:0 4px 24px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.08);transform:rotate(var(--rot));transition:all 0.35s;cursor:pointer;position:relative;animation:popIn 0.4s ease}
+[data-theme=dark] .polaroid{background:#2a1520}
+.polaroid:hover{transform:rotate(0) scale(1.04) translateY(-6px);box-shadow:0 16px 48px rgba(232,115,154,0.3);z-index:10}
+.polaroid-img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:2px;background:linear-gradient(135deg,var(--bg3),var(--bg2));display:flex;align-items:center;justify-content:center;font-size:40px;overflow:hidden}
+.polaroid-img img{width:100%;height:100%;object-fit:cover;display:block}
+.polaroid-caption{font-family:var(--font-script);font-size:16px;color:var(--text2);text-align:center;margin-top:10px;line-height:1.3}
+.polaroid-date{font-size:11px;color:var(--text3);text-align:center;margin-top:3px}
+.polaroid-heart{position:absolute;top:8px;right:8px;font-size:14px;opacity:0;transition:0.2s}
+.polaroid:hover .polaroid-heart{opacity:1}
+.polaroid-del{position:absolute;top:8px;left:8px;font-size:12px;opacity:0;transition:0.2s;background:rgba(255,80,80,0.85);color:#fff;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.polaroid:hover .polaroid-del{opacity:1}
+@keyframes popIn{from{opacity:0;transform:scale(0.85) rotate(var(--rot))}to{opacity:1;transform:rotate(var(--rot))}}
+
+/* ====== UPLOAD MODAL ====== */
+.upload-modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,0,10,0.6);backdrop-filter:blur(12px);z-index:300;align-items:center;justify-content:center;padding:20px}
+.upload-modal-overlay.open{display:flex}
+.upload-modal{background:var(--bg);border-radius:28px;padding:36px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;position:relative;animation:slideUp 0.35s cubic-bezier(0.4,0,0.2,1);box-shadow:0 24px 80px rgba(0,0,0,0.35)}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.upload-modal-close{position:absolute;top:18px;right:18px;background:var(--bg2);border:none;color:var(--text2);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:0.2s}
+.upload-modal-close:hover{background:var(--accent);color:#fff}
+.upload-modal-title{font-family:var(--font-serif);font-size:26px;color:var(--text);margin-bottom:6px}
+.upload-modal-sub{font-size:14px;color:var(--text2);margin-bottom:24px}
+
+/* DROP ZONE */
+.drop-zone{border:2.5px dashed var(--accent2);border-radius:20px;padding:40px 20px;text-align:center;cursor:pointer;transition:all 0.25s;position:relative;background:var(--accent3);overflow:hidden}
+.drop-zone.drag-over{border-color:var(--accent);background:rgba(232,115,154,0.12);transform:scale(1.02)}
+.drop-zone.has-file{border-color:var(--accent);padding:16px}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-icon{font-size:44px;margin-bottom:12px;display:block;transition:transform 0.3s}
+.drop-zone.drag-over .drop-icon{transform:scale(1.2) rotate(-10deg)}
+.drop-zone.has-file .drop-icon{display:none}
+.drop-text{font-size:15px;color:var(--text2);font-weight:500}
+.drop-hint{font-size:12px;color:var(--text3);margin-top:6px}
+
+/* IMAGE PREVIEW */
+.preview-wrap{position:relative;display:none}
+.preview-wrap.show{display:block}
+.preview-img{width:100%;max-height:280px;object-fit:contain;border-radius:14px;background:var(--bg2);display:block}
+.preview-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,0.45));border-radius:14px;display:flex;align-items:flex-end;padding:14px}
+.preview-change{background:rgba(255,255,255,0.9);color:#4a2040;border:none;padding:8px 16px;border-radius:14px;cursor:pointer;font-size:13px;font-weight:500;font-family:var(--font-sans);transition:0.2s}
+.preview-change:hover{background:#fff;transform:scale(1.03)}
+.preview-size{font-size:12px;color:rgba(255,255,255,0.85);margin-left:auto}
+
+/* PROGRESS BAR */
+.upload-progress{display:none;margin-top:14px}
+.upload-progress.show{display:block}
+.progress-label{font-size:13px;color:var(--text2);margin-bottom:6px;display:flex;justify-content:space-between}
+.progress-bar{height:6px;background:var(--bg3);border-radius:10px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),#c45a80);border-radius:10px;transition:width 0.3s ease;width:0}
+.progress-success{display:none;align-items:center;gap:8px;font-size:13px;color:#4caf50;margin-top:8px;font-weight:500}
+.progress-success.show{display:flex}
+
+/* FORM FIELDS */
+.field-group{margin-top:20px}
+.field-label{font-size:13px;color:var(--text2);font-weight:500;margin-bottom:6px;display:block}
+.input-field{width:100%;background:var(--bg2);border:1.5px solid var(--glassborder);border-radius:12px;padding:12px 16px;color:var(--text);font-size:15px;font-family:var(--font-sans);transition:0.2s}
+.input-field:focus{outline:none;border-color:var(--accent);background:var(--card)}
+.emoji-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.emoji-pick{background:var(--bg2);border:1.5px solid var(--glassborder);border-radius:10px;padding:8px 10px;cursor:pointer;font-size:20px;transition:all 0.15s;border:1.5px solid transparent}
+.emoji-pick:hover,.emoji-pick.selected{border-color:var(--accent);background:var(--accent3);transform:scale(1.1)}
+.save-btn{background:linear-gradient(135deg,var(--accent),#c45a80);color:#fff;border:none;width:100%;padding:14px;border-radius:16px;cursor:pointer;font-size:16px;font-weight:600;transition:all 0.25s;font-family:var(--font-sans);margin-top:20px;display:flex;align-items:center;justify-content:center;gap:8px}
+.save-btn:hover{opacity:0.9;transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,115,154,0.4)}
+.save-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.save-btn .btn-spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* LIGHTBOX */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);z-index:400;align-items:center;justify-content:center;padding:20px;flex-direction:column}
+.lightbox.open{display:flex}
+.lightbox-img{max-width:90vw;max-height:70vh;border-radius:16px;object-fit:contain;box-shadow:0 24px 80px rgba(0,0,0,0.5);animation:lbIn 0.3s ease}
+.lightbox-emoji{font-size:100px;animation:lbIn 0.3s ease}
+@keyframes lbIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+.lightbox-caption{font-family:var(--font-script);font-size:26px;color:#fff;margin-top:20px;text-align:center}
+.lightbox-date{font-size:13px;color:rgba(255,255,255,0.6);margin-top:4px}
+.lightbox-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;transition:0.2s}
+.lightbox-close:hover{background:rgba(255,255,255,0.25)}
+.lightbox-nav{display:flex;gap:16px;margin-top:20px}
+.lb-nav-btn{background:rgba(255,255,255,0.15);border:none;color:#fff;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;transition:0.2s}
+.lb-nav-btn:hover{background:rgba(255,255,255,0.25)}
+
+/* LETTER */
+#letter-page{background:var(--bg);padding:30px 20px;padding-top:90px;min-height:100vh}
+.letter-container{max-width:680px;margin:0 auto}
+.letter-paper{background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--glassborder);border-radius:20px;padding:50px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.letter-paper::before{content:'';position:absolute;left:70px;top:0;bottom:0;width:1px;background:rgba(232,115,154,0.2)}
+.letter-date{font-size:14px;color:var(--text3);margin-bottom:30px;text-align:right}
+.letter-greeting{font-family:var(--font-script);font-size:32px;color:var(--accent);margin-bottom:20px}
+.letter-body{font-family:var(--font-serif);font-size:18px;line-height:2;color:var(--text);position:relative;white-space:pre-line}
+.typewriter-cursor{display:inline-block;width:2px;height:20px;background:var(--accent);animation:blink 0.7s ease-in-out infinite;vertical-align:text-bottom;margin-left:2px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.letter-signature{font-family:var(--font-script);font-size:28px;color:var(--accent);text-align:right;margin-top:30px}
+.letter-deco{position:absolute;top:20px;right:20px;font-size:30px;opacity:0.3}
+
+/* GAMES */
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;padding:20px}
+.game-card{background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--glassborder);border-radius:20px;padding:28px;text-align:center;cursor:pointer;transition:all 0.3s;box-shadow:var(--shadow)}
+.game-card:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(232,115,154,0.25)}
+.game-icon{font-size:48px;margin-bottom:16px;display:block}
+.game-title{font-family:var(--font-serif);font-size:20px;color:var(--text);margin-bottom:8px}
+.game-desc{font-size:14px;color:var(--text2);line-height:1.5}
+.game-btn{margin-top:16px;background:linear-gradient(135deg,var(--accent),#c45a80);color:#fff;border:none;padding:10px 24px;border-radius:20px;cursor:pointer;font-size:14px;transition:all 0.2s;font-family:var(--font-sans)}
+.game-btn:hover{transform:scale(1.05)}
+
+/* MEMORY MATCH */
+.memory-game{padding:20px;max-width:500px;margin:0 auto}
+.memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
+.mem-card{aspect-ratio:1;background:linear-gradient(135deg,var(--accent),#c45a80);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;transition:all 0.3s;box-shadow:var(--shadow2);border:none}
+.mem-card.flipped,.mem-card.matched{background:var(--card);border:2px solid var(--accent)}
+.mem-card.matched{opacity:0.6;cursor:default}
+.game-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.game-stat{font-size:14px;color:var(--text2);font-weight:500}
+.restart-btn{background:transparent;border:1px solid var(--accent2);color:var(--accent);padding:7px 16px;border-radius:16px;cursor:pointer;font-size:13px;transition:all 0.2s;font-family:var(--font-sans)}
+.restart-btn:hover{background:var(--accent);color:#fff}
+
+/* QUIZ */
+.quiz-container{max-width:500px;margin:0 auto;padding:20px}
+.quiz-question{font-family:var(--font-serif);font-size:22px;color:var(--text);margin-bottom:24px;line-height:1.4}
+.quiz-options{display:flex;flex-direction:column;gap:10px}
+.quiz-opt{background:var(--card);border:1.5px solid var(--glassborder);color:var(--text);padding:14px 20px;border-radius:14px;cursor:pointer;text-align:left;font-size:15px;transition:all 0.2s;font-family:var(--font-sans);backdrop-filter:blur(10px)}
+.quiz-opt:hover{border-color:var(--accent);background:var(--accent3);transform:translateX(4px)}
+.quiz-opt.correct{background:#e8f5e9;border-color:#4caf50;color:#2e7d32}
+[data-theme=dark] .quiz-opt.correct{background:#1b3a1d;color:#81c784}
+.quiz-opt.wrong{background:#fce4ec;border-color:#e91e63;color:#880e4f}
+[data-theme=dark] .quiz-opt.wrong{background:#3d0f1e;color:#f48fb1}
+.quiz-progress{display:flex;gap:6px;margin-bottom:20px}
+.quiz-dot{flex:1;height:4px;background:var(--bg3);border-radius:4px;transition:0.3s}
+.quiz-dot.done{background:var(--accent)}
+.quiz-score{text-align:center;padding:30px;font-family:var(--font-serif)}
+.quiz-score-num{font-size:60px;color:var(--accent)}
+
+/* SPIN WHEEL */
+.spin-container{max-width:400px;margin:0 auto;padding:20px;text-align:center}
+#wheel-canvas{border-radius:50%;box-shadow:0 8px 32px rgba(232,115,154,0.3);cursor:pointer;max-width:100%}
+.spin-btn{margin-top:20px;background:linear-gradient(135deg,var(--accent),#c45a80);color:#fff;border:none;padding:14px 40px;border-radius:30px;cursor:pointer;font-size:16px;font-weight:600;transition:all 0.3s;font-family:var(--font-sans);box-shadow:0 4px 20px rgba(232,115,154,0.4)}
+.spin-btn:hover{transform:translateY(-2px)}
+.spin-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.spin-result{font-family:var(--font-serif);font-size:22px;color:var(--accent);margin-top:16px;min-height:30px}
+
+/* PUZZLE */
+.puzzle-container{max-width:360px;margin:0 auto;padding:20px;text-align:center}
+.puzzle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:20px 0;max-width:280px;margin-left:auto;margin-right:auto}
+.puzzle-tile{aspect-ratio:1;border:none;border-radius:10px;font-size:28px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;font-weight:600}
+.puzzle-tile:not(.empty){background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;box-shadow:var(--shadow2)}
+.puzzle-tile:not(.empty):hover{transform:scale(0.96)}
+.puzzle-tile.empty{background:var(--bg3);cursor:default}
+
+/* DASHBOARD */
+.dashboard{padding:20px;padding-top:90px}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;max-width:900px;margin:0 auto}
+.dash-card{background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--glassborder);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.dash-card-title{font-family:var(--font-serif);font-size:18px;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--glassborder)}
+.stat-row:last-child{border:none}
+.stat-label{font-size:14px;color:var(--text2)}
+.stat-val{font-size:18px;font-weight:600;color:var(--accent);font-family:var(--font-serif)}
+.anniversary-name{font-family:var(--font-script);font-size:32px;color:var(--accent);text-align:center;margin-bottom:4px}
+.anniversary-date{font-size:13px;color:var(--text3);text-align:center}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(0);background:var(--text);color:var(--bg);padding:12px 22px;border-radius:16px;font-size:14px;z-index:600;animation:toastIn 0.3s ease;pointer-events:none;white-space:nowrap}
+@keyframes toastIn{from{transform:translateX(-50%) translateY(20px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
+
+/* MANAGE MODAL */
+.manage-modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,0,10,0.65);backdrop-filter:blur(12px);z-index:300;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.manage-modal-overlay.open{display:flex}
+.manage-modal{background:var(--bg);border-radius:28px;padding:32px;max-width:560px;width:100%;margin:auto;position:relative;animation:slideUp 0.35s cubic-bezier(0.4,0,0.2,1);box-shadow:0 24px 80px rgba(0,0,0,0.35)}
+.manage-list{display:flex;flex-direction:column;gap:12px;margin-top:20px;max-height:60vh;overflow-y:auto;padding-right:4px}
+.manage-item{background:var(--card);border:1px solid var(--glassborder);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;transition:all 0.2s}
+.manage-item:hover{border-color:var(--accent2)}
+.manage-thumb{width:52px;height:52px;border-radius:10px;object-fit:cover;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;overflow:hidden}
+.manage-thumb img{width:100%;height:100%;object-fit:cover}
+.manage-info{flex:1;min-width:0}
+.manage-caption-input{width:100%;background:var(--bg2);border:1.5px solid var(--glassborder);border-radius:8px;padding:6px 10px;color:var(--text);font-size:14px;font-family:var(--font-sans);margin-bottom:4px;transition:0.2s}
+.manage-caption-input:focus{outline:none;border-color:var(--accent)}
+.manage-date-input{width:100%;background:var(--bg2);border:1.5px solid var(--glassborder);border-radius:8px;padding:5px 10px;color:var(--text);font-size:12px;font-family:var(--font-sans);transition:0.2s}
+.manage-date-input:focus{outline:none;border-color:var(--accent)}
+.manage-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.btn-save-item{background:var(--accent);color:#fff;border:none;padding:6px 12px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:600;font-family:var(--font-sans);transition:0.2s}
+.btn-save-item:hover{opacity:0.85}
+.btn-del-item{background:rgba(220,50,50,0.1);color:#e53935;border:1px solid rgba(220,50,50,0.25);padding:6px 12px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:600;font-family:var(--font-sans);transition:0.2s}
+.btn-del-item:hover{background:rgba(220,50,50,0.2)}
+.manage-empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:15px}
+.manage-footer{margin-top:20px;display:flex;gap:10px}
+.btn-clear-all{background:rgba(220,50,50,0.08);color:#e53935;border:1px solid rgba(220,50,50,0.2);padding:10px 20px;border-radius:14px;cursor:pointer;font-size:14px;font-weight:600;font-family:var(--font-sans);transition:0.2s;flex:1}
+.btn-clear-all:hover{background:rgba(220,50,50,0.18)}
+.btn-done{background:linear-gradient(135deg,var(--accent),#c45a80);color:#fff;border:none;padding:10px 28px;border-radius:14px;cursor:pointer;font-size:14px;font-weight:600;font-family:var(--font-sans);transition:0.2s;flex:1}
+.btn-done:hover{opacity:0.9}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .nav-links{display:none}
+  .countdown{gap:10px}
+  .letter-paper{padding:28px}
+  .memory-grid{gap:6px}
+  .gallery-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+}
+</style>
+</head>
+<body>
+<div id="loading">
+  <div class="loading-heart">💕</div>
+  <div class="loading-quote" id="loading-quote"></div>
+  <div class="loading-bar"><div class="loading-progress"></div></div>
+</div>
+<div id="particles"></div>
+
+<nav>
+  <div class="nav-logo">♡ Beloved</div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('landing')">Home</button>
+    <button class="nav-btn" onclick="showPage('gallery')">Memories</button>
+    <button class="nav-btn" onclick="showPage('letter')">Letter</button>
+    <button class="nav-btn" onclick="showPage('games')">Games</button>
+    <button class="nav-btn" onclick="showPage('dashboard')">Dashboard</button>
+  </div>
+  <div class="nav-right">
+    <button class="icon-btn" id="music-btn" title="Toggle music" onclick="toggleMusic()">🎵</button>
+    <button class="icon-btn" id="theme-btn" title="Toggle theme" onclick="toggleTheme()">🌙</button>
+  </div>
+</nav>
+
+<!-- LANDING -->
+<div id="landing" class="page active">
+  <div class="landing-badge">💖 Our Special Day</div>
+  <h1 class="landing-title">Happy <span>Monthsary</span>,<br>My Love</h1>
+  <p class="landing-sub">Every moment with you feels like the first day all over again. This little corner of the internet is made just for us. 🌹</p>
+  <div class="countdown-wrapper">
+    <div class="countdown-label">🕊 Together for</div>
+    <div class="countdown" id="countdown">
+      <div class="countdown-unit"><span class="countdown-num" id="cd-months">0</span><span class="countdown-name">Months</span></div>
+      <div class="countdown-sep">·</div>
+      <div class="countdown-unit"><span class="countdown-num" id="cd-days">0</span><span class="countdown-name">Days</span></div>
+      <div class="countdown-sep">·</div>
+      <div class="countdown-unit"><span class="countdown-num" id="cd-hours">0</span><span class="countdown-name">Hours</span></div>
+      <div class="countdown-sep">·</div>
+      <div class="countdown-unit"><span class="countdown-num" id="cd-mins">0</span><span class="countdown-name">Minutes</span></div>
+    </div>
+  </div>
+  <button class="cta-btn" onclick="showPage('gallery')">✨ Explore Our Memories</button>
+  <p class="music-hint">🎵 Click the music note above to play our song</p>
+</div>
+
+<!-- GALLERY -->
+<div id="gallery" class="page">
+  <div class="gallery-header">
+    <h2 class="section-title">Our Memory Gallery</h2>
+    <p class="section-sub">Captured moments that live in our hearts forever 📸</p>
+    <div class="gallery-controls">
+      <button class="add-memory-btn" onclick="openUploadModal()">📸 Add a Memory</button>
+      <button class="add-memory-btn" onclick="openManageModal()" style="border-color:#c4789a;color:var(--text2)">🗂️ Manage Memories</button>
+    </div>
+  </div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+</div>
+
+<!-- LETTER -->
+<div id="letter-page" class="page">
+  <div class="letter-container">
+    <h2 class="section-title" style="text-align:center;margin-bottom:30px">A Letter From My Heart</h2>
+    <div class="letter-paper">
+      <div class="letter-deco">💌</div>
+      <div class="letter-date" id="letter-date"></div>
+      <div class="letter-greeting">My Dearest Love,</div>
+      <div class="letter-body" id="typewriter-text"></div>
+      <div class="letter-signature">Forever yours, ♡<br>Your person</div>
+    </div>
+  </div>
+</div>
+
+<!-- GAMES -->
+<div id="games" class="page">
+  <div class="gallery-header">
+    <h2 class="section-title">Play Together 💝</h2>
+    <p class="section-sub">Fun little games just for us</p>
+  </div>
+  <div class="games-grid">
+    <div class="game-card"><span class="game-icon">🃏</span><div class="game-title">Memory Match</div><div class="game-desc">Find all the matching pairs! Test how well you know our love symbols.</div><button class="game-btn" onclick="showGame('memory')">Play Now</button></div>
+    <div class="game-card"><span class="game-icon">💬</span><div class="game-title">Couple Quiz</div><div class="game-desc">How well do you know each other? Answer fun questions about your relationship.</div><button class="game-btn" onclick="showGame('quiz')">Play Now</button></div>
+    <div class="game-card"><span class="game-icon">🧩</span><div class="game-title">Love Puzzle</div><div class="game-desc">Rearrange the tiles to reveal a hidden romantic message!</div><button class="game-btn" onclick="showGame('puzzle')">Play Now</button></div>
+    <div class="game-card"><span class="game-icon">🎡</span><div class="game-title">Spin the Wheel</div><div class="game-desc">Spin for a romantic challenge or sweet dare for your date!</div><button class="game-btn" onclick="showGame('spin')">Play Now</button></div>
+  </div>
+</div>
+
+<!-- GAME PANEL -->
+<div id="game-panel" class="page">
+  <div style="padding:20px 20px 0;max-width:600px;margin:0 auto">
+    <button onclick="showPage('games')" style="background:var(--card);border:1px solid var(--glassborder);color:var(--text2);padding:8px 16px;border-radius:16px;cursor:pointer;font-size:14px;backdrop-filter:blur(10px);font-family:var(--font-sans)">← Back to Games</button>
+    <h2 class="section-title" id="game-panel-title" style="margin-top:20px;text-align:center"></h2>
+  </div>
+  <div id="game-content"></div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="page">
+  <div style="text-align:center;padding:0 20px 20px;padding-top:10px">
+    <div class="anniversary-name" id="couple-name-disp">You & Your Love</div>
+    <div class="anniversary-date">Since: <span id="start-date-display"></span></div>
+  </div>
+  <div class="dash-grid">
+    <div class="dash-card">
+      <div class="dash-card-title">📊 Our Stats</div>
+      <div class="stat-row"><span class="stat-label">Months Together</span><span class="stat-val" id="stat-months">0</span></div>
+      <div class="stat-row"><span class="stat-label">Days Together</span><span class="stat-val" id="stat-days">0</span></div>
+      <div class="stat-row"><span class="stat-label">Memories Saved</span><span class="stat-val" id="stat-memories">0</span></div>
+      <div class="stat-row"><span class="stat-label">Games Played</span><span class="stat-val" id="stat-games">0</span></div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-title">✏️ Edit Our Story</div>
+      <label class="field-label" style="display:block;font-size:13px;color:var(--text2);margin-bottom:4px">Your names</label>
+      <input class="input-field" id="couple-name-input" placeholder="e.g. John & Jane" type="text" style="margin-bottom:12px">
+      <label class="field-label" style="display:block;font-size:13px;color:var(--text2);margin-bottom:4px">Start date</label>
+      <input class="input-field" id="start-date-input" type="date" style="margin-bottom:12px">
+      <label class="field-label" style="display:block;font-size:13px;color:var(--text2);margin-bottom:4px">Custom love letter</label>
+      <textarea class="input-field" id="custom-letter" rows="4" placeholder="Write your own love letter..."></textarea>
+      <button class="save-btn" onclick="saveProfile()" style="margin-top:12px">💾 Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== UPLOAD MODAL ====== -->
+<div class="upload-modal-overlay" id="upload-modal" onclick="if(event.target===this)closeUploadModal()">
+  <div class="upload-modal">
+    <button class="upload-modal-close" onclick="closeUploadModal()">✕</button>
+    <div class="upload-modal-title">Add a Memory 📸</div>
+    <div class="upload-modal-sub">Upload a photo or pick an emoji for your polaroid</div>
+
+    <!-- Drop Zone -->
+    <div class="drop-zone" id="drop-zone" ondragover="onDragOver(event)" ondragleave="onDragLeave()" ondrop="onDrop(event)">
+      <input type="file" id="file-input" accept="image/*" onchange="onFileSelect(event)">
+      <span class="drop-icon">📷</span>
+      <div class="drop-text">Drag & drop a photo here</div>
+      <div class="drop-hint">or click to browse • JPG, PNG, GIF, WEBP</div>
+    </div>
+
+    <!-- Image Preview -->
+    <div class="preview-wrap" id="preview-wrap">
+      <img id="preview-img" class="preview-img" src="" alt="Preview">
+      <div class="preview-overlay">
+        <button class="preview-change" onclick="document.getElementById('file-input').click()">🔄 Change photo</button>
+        <span class="preview-size" id="preview-size"></span>
+      </div>
+    </div>
+
+    <!-- Upload Progress -->
+    <div class="upload-progress" id="upload-progress">
+      <div class="progress-label"><span>Processing...</span><span id="progress-pct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-success" id="progress-success">✅ Photo ready!</div>
+    </div>
+
+    <!-- No photo — emoji fallback -->
+    <div class="field-group" id="emoji-group">
+      <label class="field-label">Or pick an emoji (if no photo)</label>
+      <div class="emoji-row" id="emoji-row"></div>
+    </div>
+
+    <!-- Caption & Date -->
+    <div class="field-group">
+      <label class="field-label">Caption *</label>
+      <input class="input-field" id="m-caption" placeholder="A beautiful memory..." type="text">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Date</label>
+      <input class="input-field" id="m-date" placeholder="e.g. May 2025" type="text">
+    </div>
+
+    <button class="save-btn" id="add-memory-btn" onclick="addMemory()">
+      <span class="btn-spinner" id="btn-spinner"></span>
+      <span id="btn-label">💕 Add to Gallery</span>
+    </button>
+  </div>
+</div>
+
+<!-- MANAGE MEMORIES MODAL -->
+<div class="manage-modal-overlay" id="manage-modal" onclick="if(event.target===this)closeManageModal()">
+  <div class="manage-modal">
+    <button class="upload-modal-close" onclick="closeManageModal()">✕</button>
+    <div class="upload-modal-title">Manage Memories 🗂️</div>
+    <div class="upload-modal-sub">Edit captions, dates, or remove memories</div>
+    <div class="manage-list" id="manage-list"></div>
+    <div class="manage-footer">
+      <button class="btn-clear-all" onclick="clearAllMemories()">🗑️ Clear All</button>
+      <button class="btn-done" onclick="closeManageModal()">✓ Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lb-img" class="lightbox-img" src="" alt="" style="display:none">
+  <div id="lb-emoji" class="lightbox-emoji" style="display:none"></div>
+  <div class="lightbox-caption" id="lb-caption"></div>
+  <div class="lightbox-date" id="lb-date"></div>
+  <div class="lightbox-nav">
+    <button class="lb-nav-btn" onclick="lbNav(-1)">‹</button>
+    <button class="lb-nav-btn" onclick="lbNav(1)">›</button>
+  </div>
+</div>
+
+<script>
+/* ──────────────────────────────
+   STATE & STORAGE
+─────────────────────────────── */
+const STORAGE_KEY='beloved_v2';
+const DEFAULT_MEMORIES=[
+  {emoji:'🌹',caption:'Our first date',date:'Jan 2026',src:null},
+  {emoji:'💕',caption:'Movie nights',date:'Feb 2025',src:null},
+  {emoji:'✈️',caption:'Our first trip',date:'April 2026',src:null},
+  {emoji:'🎂',caption:'Your birthday',date:'August 2025',src:null},
+];
+const DEFAULT_LETTER=`Every single day I wake up grateful that you chose me. You have this incredible ability to make ordinary moments feel like magic — whether it's our lazy Sunday mornings, the way you laugh at my terrible jokes, or how you hold my hand just when I need it most.
+
+I wrote this letter because I wanted you to have something to hold onto. A little reminder that you are deeply, completely, and endlessly loved. Not just today, but every day of every month that passes.
+
+Thank you for being my home, my adventure, and my greatest joy. Here's to many more months of growing, laughing, and loving together.`;
+
+function loadState(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(raw)return JSON.parse(raw);
+  }catch(e){}
+  return null;
+}
+function saveState(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){
+    showToast('⚠️ Storage full — some images may not persist');
+  }
+}
+
+let saved=loadState();
+let state={
+  theme:saved?.theme||'light',
+  music:false,
+  gamesPlayed:saved?.gamesPlayed||0,
+  startDate:saved?.startDate||'2026-01-16',
+  coupleName:saved?.coupleName||'You & Your Love',
+  customLetter:saved?.customLetter||'',
+  memories:saved?.memories||DEFAULT_MEMORIES
+};
+
+const QUOTES=["Every love story is beautiful, but ours is my favorite 🌹","You are my today and all of my tomorrows 💕","In you, I found the love I was searching for ✨","Every day with you is Valentine's Day 💝","You make my heart smile 🌸"];
+const EMOJIS_FLOAT=["🌹","💕","✨","🌸","💖","🎀","🌺","💫","🦋","🌷"];
+const EMOJI_PICKS=["🌹","💕","✨","🌸","💖","🎀","🌺","💫","🦋","🌷","🎵","🏖️","🎂","☕","🍕"];
+
+let selectedEmoji='🌹';
+let pendingImageSrc=null;
+let lbIndex=0;
+
+/* ──────────────────────────────
+   LOADING
+─────────────────────────────── */
+let lqIdx=0;
+function cycleQuote(){document.getElementById('loading-quote').textContent=QUOTES[lqIdx%QUOTES.length];lqIdx++;}
+cycleQuote();
+const quoteTimer=setInterval(()=>{if(document.getElementById('loading').style.display!=='none')cycleQuote();},800);
+setTimeout(()=>{
+  const l=document.getElementById('loading');
+  l.classList.add('fade-out');
+  setTimeout(()=>{
+    l.style.display='none';
+    clearInterval(quoteTimer);
+    startParticles();startCountdown();startTypewriter();
+    if(state.theme==='dark'){document.documentElement.setAttribute('data-theme','dark');document.getElementById('theme-btn').textContent='☀️';}
+  },800);
+},2800);
+
+/* ──────────────────────────────
+   PARTICLES
+─────────────────────────────── */
+function startParticles(){
+  const c=document.getElementById('particles');
+  setInterval(()=>{
+    const h=document.createElement('div');
+    h.className='heart-particle';
+    h.textContent=EMOJIS_FLOAT[Math.floor(Math.random()*EMOJIS_FLOAT.length)];
+    h.style.left=Math.random()*100+'vw';
+    h.style.animationDuration=(8+Math.random()*8)+'s';
+    h.style.animationDelay=Math.random()*2+'s';
+    h.style.fontSize=(10+Math.random()*14)+'px';
+    c.appendChild(h);setTimeout(()=>h.remove(),16000);
+  },1400);
+  for(let i=0;i<8;i++){
+    const s=document.createElement('div');s.className='sparkle';
+    s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
+    s.style.animationDelay=Math.random()*2+'s';c.appendChild(s);
+  }
+}
+
+/* ──────────────────────────────
+   COUNTDOWN
+─────────────────────────────── */
+function startCountdown(){
+  function update(){
+    const start=new Date(state.startDate+'T00:00:00');
+    const now=new Date();
+    const diff=now-start;
+    const totalDays=Math.floor(diff/86400000);
+    const months=Math.floor(totalDays/30);
+    const days=totalDays%30;
+    const hours=Math.floor((diff%86400000)/3600000);
+    const mins=Math.floor((diff%3600000)/60000);
+    document.getElementById('cd-months').textContent=months;
+    document.getElementById('cd-days').textContent=days;
+    document.getElementById('cd-hours').textContent=hours;
+    document.getElementById('cd-mins').textContent=String(mins).padStart(2,'0');
+    const sm=document.getElementById('stat-months');const sd=document.getElementById('stat-days');
+    if(sm)sm.textContent=months;if(sd)sd.textContent=totalDays;
+  }
+  update();setInterval(update,30000);
+}
+
+/* ──────────────────────────────
+   TYPEWRITER
+─────────────────────────────── */
+function startTypewriter(){
+  const el=document.getElementById('typewriter-text');
+  if(!el)return;
+  const cursor=document.createElement('span');cursor.className='typewriter-cursor';
+  el.innerHTML='';el.appendChild(cursor);
+  const text=state.customLetter||DEFAULT_LETTER;
+  let i=0;
+  document.getElementById('letter-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  function type(){
+    if(i<text.length){cursor.insertAdjacentText('beforebegin',text[i++]);setTimeout(type,i<20?60:22);}
+  }
+  type();
+}
+
+/* ──────────────────────────────
+   GALLERY
+─────────────────────────────── */
+const ROTS=['-2deg','1.5deg','-1deg','2.5deg','-1.5deg','1deg','-3deg','2deg'];
+function renderGallery(){
+  const g=document.getElementById('gallery-grid');
+  if(!g)return;
+  if(state.memories.length===0){
+    g.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text3)"><div style="font-size:60px;margin-bottom:16px">📷</div><div style="font-family:var(--font-serif);font-size:20px">No memories yet</div><div style="font-size:14px;margin-top:8px">Add your first polaroid above!</div></div>`;
+    const sm=document.getElementById('stat-memories');if(sm)sm.textContent=0;
+    return;
+  }
+  g.innerHTML=state.memories.map((m,i)=>`
+    <div class="polaroid" style="--rot:${ROTS[i%ROTS.length]}">
+      <button class="polaroid-del" onclick="quickDelete(${i})" title="Remove memory">✕</button>
+      <span class="polaroid-heart">❤️</span>
+      <div class="polaroid-img" onclick="openLightbox(${i})" style="cursor:zoom-in">
+        ${m.src?`<img src="${m.src}" alt="${m.caption}" loading="lazy">`:`<span>${m.emoji||'📸'}</span>`}
+      </div>
+      <div class="polaroid-caption">${m.caption}</div>
+      <div class="polaroid-date">${m.date}</div>
+    </div>`).join('');
+  const sm=document.getElementById('stat-memories');if(sm)sm.textContent=state.memories.length;
+}
+
+function quickDelete(i){
+  // No confirm() — just remove directly with undo toast
+  const removed=state.memories.splice(i,1)[0];
+  saveState();renderGallery();
+  showToastUndo('🗑️ Memory removed',()=>{
+    state.memories.splice(i,0,removed);saveState();renderGallery();
+  });
+}
+
+/* ──────────────────────────────
+   MANAGE MEMORIES MODAL
+─────────────────────────────── */
+function openManageModal(){
+  renderManageList();
+  document.getElementById('manage-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeManageModal(){
+  document.getElementById('manage-modal').classList.remove('open');
+  document.body.style.overflow='';
+  renderGallery();
+}
+
+function renderManageList(){
+  const list=document.getElementById('manage-list');
+  if(state.memories.length===0){
+    list.innerHTML=`<div class="manage-empty">No memories yet — add some! 📷</div>`;
+    return;
+  }
+  list.innerHTML=state.memories.map((m,i)=>`
+    <div class="manage-item" id="mitem-${i}">
+      <div class="manage-thumb">
+        ${m.src?`<img src="${m.src}" alt="">`:`${m.emoji||'📸'}`}
+      </div>
+      <div class="manage-info">
+        <input class="manage-caption-input" id="mcap-${i}" value="${m.caption.replace(/"/g,'&quot;')}" placeholder="Caption...">
+        <input class="manage-date-input" id="mdate-${i}" value="${m.date}" placeholder="Date...">
+      </div>
+      <div class="manage-actions">
+        <button class="btn-save-item" onclick="saveMemoryEdit(${i})">💾 Save</button>
+        <button class="btn-del-item" onclick="deleteMemoryManage(${i})">🗑️ Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+function saveMemoryEdit(i){
+  const cap=document.getElementById('mcap-'+i).value.trim();
+  const date=document.getElementById('mdate-'+i).value.trim();
+  if(!cap){showToast('⚠️ Caption cannot be empty');return;}
+  state.memories[i].caption=cap;
+  state.memories[i].date=date||state.memories[i].date;
+  saveState();
+  // Flash the item green briefly
+  const item=document.getElementById('mitem-'+i);
+  item.style.borderColor='#4caf50';item.style.background='rgba(76,175,80,0.08)';
+  setTimeout(()=>{item.style.borderColor='';item.style.background='';},800);
+  showToast('✅ Memory updated!');
+}
+
+function deleteMemoryManage(i){
+  const removed=state.memories.splice(i,1)[0];
+  saveState();renderManageList();
+  showToastUndo('🗑️ Memory deleted',()=>{
+    state.memories.splice(i,0,removed);saveState();renderManageList();
+  });
+}
+
+function clearAllMemories(){
+  if(state.memories.length===0){showToast('Nothing to clear!');return;}
+  const backup=[...state.memories];
+  state.memories=[];saveState();renderManageList();
+  showToastUndo('🗑️ All memories cleared',()=>{
+    state.memories=backup;saveState();renderManageList();
+  });
+}
+
+/* ──────────────────────────────
+   TOAST WITH UNDO
+─────────────────────────────── */
+
+/* ──────────────────────────────
+   LIGHTBOX
+─────────────────────────────── */
+function openLightbox(i){
+  lbIndex=i;renderLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function renderLightbox(){
+  const m=state.memories[lbIndex];
+  if(!m)return;
+  const img=document.getElementById('lb-img');
+  const emo=document.getElementById('lb-emoji');
+  if(m.src){img.src=m.src;img.style.display='block';emo.style.display='none';}
+  else{emo.textContent=m.emoji||'📸';emo.style.display='block';img.style.display='none';}
+  document.getElementById('lb-caption').textContent=m.caption;
+  document.getElementById('lb-date').textContent=m.date;
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow='';
+}
+function lbNav(dir){
+  lbIndex=(lbIndex+dir+state.memories.length)%state.memories.length;renderLightbox();
+}
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('lightbox').classList.contains('open')){
+    if(e.key==='Escape')closeLightbox();
+    if(e.key==='ArrowRight')lbNav(1);
+    if(e.key==='ArrowLeft')lbNav(-1);
+  }
+  if(document.getElementById('manage-modal').classList.contains('open')&&e.key==='Escape')closeManageModal();
+  if(document.getElementById('upload-modal').classList.contains('open')&&e.key==='Escape')closeUploadModal();
+});
+
+/* ──────────────────────────────
+   UPLOAD MODAL
+─────────────────────────────── */
+function buildEmojiPicker(){
+  const row=document.getElementById('emoji-row');
+  row.innerHTML=EMOJI_PICKS.map(e=>`<button class="emoji-pick${e===selectedEmoji?' selected':''}" onclick="pickEmoji('${e}',this)">${e}</button>`).join('');
+}
+
+function openUploadModal(){
+  pendingImageSrc=null;selectedEmoji='🌹';
+  document.getElementById('preview-wrap').classList.remove('show');
+  document.getElementById('drop-zone').classList.remove('has-file','drag-over');
+  document.getElementById('upload-progress').classList.remove('show');
+  document.getElementById('progress-success').classList.remove('show');
+  document.getElementById('progress-fill').style.width='0';
+  document.getElementById('m-caption').value='';
+  document.getElementById('m-date').value='';
+  document.getElementById('file-input').value='';
+  document.getElementById('btn-label').textContent='💕 Add to Gallery';
+  document.getElementById('btn-spinner').style.display='none';
+  buildEmojiPicker();
+  document.getElementById('upload-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeUploadModal(){
+  document.getElementById('upload-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function pickEmoji(e,btn){
+  selectedEmoji=e;
+  document.querySelectorAll('.emoji-pick').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+/* DRAG & DROP */
+function onDragOver(e){e.preventDefault();document.getElementById('drop-zone').classList.add('drag-over');}
+function onDragLeave(){document.getElementById('drop-zone').classList.remove('drag-over');}
+function onDrop(e){
+  e.preventDefault();onDragLeave();
+  const file=e.dataTransfer.files[0];
+  if(file&&file.type.startsWith('image/'))processFile(file);
+  else showToast('⚠️ Please drop an image file');
+}
+function onFileSelect(e){
+  const file=e.target.files[0];
+  if(file)processFile(file);
+}
+
+function processFile(file){
+  if(file.size>10*1024*1024){showToast('⚠️ Image too large (max 10MB)');return;}
+
+  const prog=document.getElementById('upload-progress');
+  const fill=document.getElementById('progress-fill');
+  const pct=document.getElementById('progress-pct');
+  const succ=document.getElementById('progress-success');
+
+  // Reset & show progress bar immediately
+  succ.classList.remove('show');
+  fill.style.transition='none';
+  fill.style.width='0%';
+  pct.textContent='0%';
+  prog.classList.add('show');
+
+  // Step 1 — let browser paint the 0% bar first, then start reading
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+
+      // Fake progress ticks while FileReader works
+      fill.style.transition='width 0.15s ease';
+      let p=0;
+      const ticker=setInterval(()=>{
+        p=Math.min(p+(Math.random()*12+4),75);
+        fill.style.width=p+'%';
+        pct.textContent=Math.round(p)+'%';
+      },120);
+
+      const reader=new FileReader();
+
+      reader.onload=ev=>{
+        clearInterval(ticker);
+        // Jump to 85% while canvas compresses
+        fill.style.width='85%';pct.textContent='85%';
+
+        // Give the browser one frame to paint 85%, then compress
+        requestAnimationFrame(()=>{
+          const img=new Image();
+          img.onload=()=>{
+            const MAX=900;
+            let w=img.width,h=img.height;
+            if(w>MAX||h>MAX){
+              if(w>=h){h=Math.round(h*MAX/w);w=MAX;}
+              else{w=Math.round(w*MAX/h);h=MAX;}
+            }
+            const canvas=document.createElement('canvas');
+            canvas.width=w;canvas.height=h;
+            canvas.getContext('2d').drawImage(img,0,0,w,h);
+            const compressed=canvas.toDataURL('image/jpeg',0.85);
+            const approxSize=Math.round(compressed.length*0.75);
+
+            // Done — jump to 100%
+            fill.style.width='100%';pct.textContent='100%';
+            setTimeout(()=>succ.classList.add('show'),150);
+
+            pendingImageSrc=compressed;
+
+            // Show preview
+            const previewImg=document.getElementById('preview-img');
+            previewImg.onload=()=>{
+              document.getElementById('preview-size').textContent=formatBytes(approxSize);
+              document.getElementById('preview-wrap').classList.add('show');
+            };
+            previewImg.src=compressed;
+            document.getElementById('drop-zone').classList.add('has-file');
+            document.getElementById('drop-zone').querySelector('.drop-text').textContent='📷 Photo selected';
+          };
+          img.onerror=()=>{showToast('❌ Could not process image');prog.classList.remove('show');};
+          img.src=ev.target.result;
+        });
+      };
+
+      reader.onerror=()=>{
+        clearInterval(ticker);
+        showToast('❌ Could not read file');
+        prog.classList.remove('show');
+      };
+
+      reader.readAsDataURL(file);
+    });
+  });
+}
+
+function formatBytes(b){if(b<1024)return b+'B';if(b<1048576)return Math.round(b/1024)+'KB';return(b/1048576).toFixed(1)+'MB';}
+
+/* ADD MEMORY */
+function addMemory(){
+  const caption=document.getElementById('m-caption').value.trim();
+  if(!caption){showToast('⚠️ Please add a caption');document.getElementById('m-caption').focus();return;}
+  const date=document.getElementById('m-date').value.trim()||new Date().toLocaleDateString('en-US',{month:'short',year:'numeric'});
+
+  // Animate button
+  const btn=document.getElementById('add-memory-btn');
+  const spinner=document.getElementById('btn-spinner');
+  const label=document.getElementById('btn-label');
+  btn.disabled=true;spinner.style.display='inline-block';label.textContent='Saving...';
+
+  setTimeout(()=>{
+    state.memories.push({emoji:selectedEmoji,caption,date,src:pendingImageSrc||null});
+    try{saveState();}catch(e){}
+    btn.disabled=false;spinner.style.display='none';label.textContent='💕 Add to Gallery';
+    closeUploadModal();
+    renderGallery();
+    showToast('💕 Memory added to gallery!');
+    if(document.getElementById('gallery').classList.contains('active')){}
+    else showPage('gallery');
+  },600);
+}
+
+/* ──────────────────────────────
+   PAGE ROUTING
+─────────────────────────────── */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const map={landing:'landing',gallery:'gallery',letter:'letter-page',games:'games',dashboard:'dashboard','game-panel':'game-panel'};
+  const pageEl=document.getElementById(map[id]||id);
+  if(pageEl)pageEl.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>{if(b.textContent.toLowerCase().includes(id.slice(0,4)))b.classList.add('active')});
+  if(id==='gallery')renderGallery();
+  if(id==='letter'){setTimeout(startTypewriter,100);}
+  if(id==='dashboard')updateDashboard();
+}
+
+/* ──────────────────────────────
+   DASHBOARD
+─────────────────────────────── */
+function updateDashboard(){
+  document.getElementById('couple-name-disp').textContent=state.coupleName;
+  const start=new Date(state.startDate+'T00:00:00');
+  document.getElementById('start-date-display').textContent=start.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('stat-games').textContent=state.gamesPlayed;
+  const diff=new Date()-start;
+  document.getElementById('stat-months').textContent=Math.floor(diff/86400000/30);
+  document.getElementById('stat-days').textContent=Math.floor(diff/86400000);
+  document.getElementById('stat-memories').textContent=state.memories.length;
+  document.getElementById('couple-name-input').value=state.coupleName;
+  document.getElementById('start-date-input').value=state.startDate;
+  if(state.customLetter)document.getElementById('custom-letter').value=state.customLetter;
+}
+function saveProfile(){
+  const n=document.getElementById('couple-name-input').value.trim();
+  const d=document.getElementById('start-date-input').value;
+  const l=document.getElementById('custom-letter').value.trim();
+  if(n)state.coupleName=n;
+  if(d)state.startDate=d;
+  if(l)state.customLetter=l;
+  saveState();updateDashboard();startCountdown();
+  showToast('✨ Profile saved with love!');
+}
+
+/* ──────────────────────────────
+   THEME & MUSIC
+─────────────────────────────── */
+function toggleTheme(){
+  state.theme=state.theme==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',state.theme==='dark'?'dark':'');
+  document.getElementById('theme-btn').textContent=state.theme==='dark'?'☀️':'🌙';
+  saveState();
+}
+const audio=new Audio('https://cdn.freesound.org/previews/459/459659_5121236-lq.mp3');
+audio.loop=true;audio.volume=0.3;
+function toggleMusic(){
+  if(state.music){audio.pause();state.music=false;document.getElementById('music-btn').textContent='🎵';}
+  else{audio.play().catch(()=>{});state.music=true;document.getElementById('music-btn').textContent='🔇';}
+}
+
+/* ──────────────────────────────
+   TOAST
+─────────────────────────────── */
+function showToast(msg){
+  const old=document.querySelector('.toast');if(old)old.remove();
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.4s';setTimeout(()=>t.remove(),400);},2800);
+}
+
+function showToastUndo(msg,undoFn){
+  const old=document.querySelector('.toast');if(old)old.remove();
+  const t=document.createElement('div');t.className='toast';
+  t.style.cssText='display:flex;align-items:center;gap:14px;white-space:nowrap';
+  t.innerHTML=`<span>${msg}</span><button onclick="this.closest('.toast')._undo()" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:inherit;padding:4px 12px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;font-family:var(--font-sans)">Undo</button>`;
+  t._undo=()=>{undoFn();t.remove();showToast('↩️ Restored!');};
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.4s';setTimeout(()=>t.remove(),400);},4000);
+}
+
+/* ──────────────────────────────
+   GAMES
+─────────────────────────────── */
+function showGame(type){
+  showPage('game-panel');
+  state.gamesPlayed++;saveState();
+  const titles={memory:'Memory Match 🃏',quiz:'Couple Quiz 💬',puzzle:'Love Puzzle 🧩',spin:'Spin the Wheel 🎡'};
+  document.getElementById('game-panel-title').textContent=titles[type];
+  const c=document.getElementById('game-content');
+  if(type==='memory'){c.innerHTML=buildMemoryGame();initMemory();}
+  else if(type==='quiz'){c.innerHTML='<div class="quiz-container" id="quiz-wrap"></div>';initQuiz();}
+  else if(type==='puzzle'){c.innerHTML=buildPuzzle();initPuzzle();}
+  else if(type==='spin'){c.innerHTML='<div class="spin-container"><canvas id="wheel-canvas" width="300" height="300"></canvas><br><button class="spin-btn" id="spin-btn" onclick="doSpin()">🎡 Spin!</button><div class="spin-result" id="spin-result"></div></div>';drawWheel();}
+}
+
+// MEMORY MATCH
+const memEmojis=['🌹','💕','✨','🌸','💖','🎀','🌺','💫'];
+function buildMemoryGame(){return`<div class="memory-game"><div class="game-info"><div class="game-stat">Moves: <span id="mem-moves">0</span></div><div class="game-stat">Pairs: <span id="mem-pairs">0</span>/8</div><button class="restart-btn" onclick="initMemory()">↺ Restart</button></div><div class="memory-grid" id="mem-grid"></div></div>`;}
+let memCards=[],memFlipped=[],memMoves=0,memPairs=0,memLocked=false;
+function initMemory(){
+  const doubled=[...memEmojis,...memEmojis].sort(()=>Math.random()-0.5);
+  memCards=doubled;memFlipped=[];memMoves=0;memPairs=0;memLocked=false;
+  document.getElementById('mem-moves').textContent=0;document.getElementById('mem-pairs').textContent=0;
+  document.getElementById('mem-grid').innerHTML=doubled.map((e,i)=>`<button class="mem-card" id="mc${i}" onclick="flipCard(${i})" data-emoji="${e}">❓</button>`).join('');
+}
+function flipCard(i){
+  if(memLocked)return;const card=document.getElementById('mc'+i);
+  if(card.classList.contains('flipped')||card.classList.contains('matched'))return;
+  card.textContent=memCards[i];card.classList.add('flipped');memFlipped.push(i);
+  if(memFlipped.length===2){
+    memLocked=true;memMoves++;document.getElementById('mem-moves').textContent=memMoves;
+    const[a,b]=memFlipped;
+    if(memCards[a]===memCards[b]){
+      document.getElementById('mc'+a).classList.add('matched');document.getElementById('mc'+b).classList.add('matched');
+      memPairs++;document.getElementById('mem-pairs').textContent=memPairs;memFlipped=[];memLocked=false;
+      if(memPairs===8)setTimeout(()=>showToast('🎉 You matched them all! Love wins!'),300);
+    }else{
+      setTimeout(()=>{
+        document.getElementById('mc'+a).textContent='❓';document.getElementById('mc'+a).classList.remove('flipped');
+        document.getElementById('mc'+b).textContent='❓';document.getElementById('mc'+b).classList.remove('flipped');
+        memFlipped=[];memLocked=false;
+      },900);
+    }
+  }
+}
+
+// QUIZ
+const quizData=[
+  {q:"Where was your first date?",opts:["A restaurant","A park","A mall","A cafe"],a:2},
+  {q:"What's your partner's favorite color?",opts:["Blue","Pink","Red","Purple"],a:0},
+  {q:"Which word best describes your relationship?",opts:["Passionate","Peaceful","Adventurous","War"],a:3},
+  {q:"What's your favorite thing to do together?",opts:["Cook together","Watch movies","Travel","Play games"],a:3},
+  {q:"How did you first meet?",opts:["Through friends","At work","Online","At school"],a:1}
+];
+let qIdx=0,qScore=0;
+function initQuiz(){qIdx=0;qScore=0;renderQuestion();}
+function renderQuestion(){
+  const w=document.getElementById('quiz-wrap');
+  if(qIdx>=quizData.length){
+    w.innerHTML=`<div class="quiz-score"><div style="font-size:48px">🏆</div><div class="quiz-score-num">${qScore}/${quizData.length}</div><div style="font-family:var(--font-serif);font-size:20px;color:var(--text);margin-top:12px">${qScore>=4?'You know each other so well! 💕':'Every question brings you closer! 💖'}</div><button class="game-btn" style="margin-top:20px" onclick="initQuiz()">Play Again</button></div>`;
+    return;
+  }
+  const q=quizData[qIdx];
+  const dots=quizData.map((_,i)=>`<div class="quiz-dot${i<qIdx?' done':''}"></div>`).join('');
+  w.innerHTML=`<div class="quiz-progress">${dots}</div><div class="quiz-question">${q.q}</div><div class="quiz-options">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerQ(${i},${q.a},this)">${o}</button>`).join('')}</div>`;
+}
+function answerQ(chosen,correct,btn){
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+  if(chosen===correct){btn.classList.add('correct');qScore++;showToast('✨ Correct!');}
+  else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opt')[correct].classList.add('correct');}
+  qIdx++;setTimeout(renderQuestion,1200);
+}
+
+// PUZZLE
+const puzzleGoal=['💕','🌹','✨','🌸','💖','🎀','🌺','💫',''];
+let puzzleTiles=[];
+function buildPuzzle(){return`<div class="puzzle-container"><p style="color:var(--text2);font-size:14px;margin-bottom:10px">Arrange the tiles in order!</p><div class="puzzle-grid" id="puzzle-grid"></div><div id="puzzle-msg" style="font-family:var(--font-serif);color:var(--accent);min-height:28px;font-size:18px"></div><button class="restart-btn" onclick="initPuzzle()">↺ Shuffle</button></div>`;}
+function initPuzzle(){puzzleTiles=[...puzzleGoal].sort(()=>Math.random()-0.5);renderPuzzle();}
+function renderPuzzle(){
+  const g=document.getElementById('puzzle-grid');if(!g)return;
+  g.innerHTML=puzzleTiles.map((t,i)=>`<button class="puzzle-tile${t===''?' empty':''}" onclick="moveTile(${i})">${t}</button>`).join('');
+  if(JSON.stringify(puzzleTiles)===JSON.stringify(puzzleGoal))document.getElementById('puzzle-msg').textContent='🎉 Puzzle solved! You did it!';
+  else document.getElementById('puzzle-msg').textContent='';
+}
+function moveTile(i){
+  const empty=puzzleTiles.indexOf('');
+  const rv=Math.abs(i-empty)===1&&Math.floor(i/3)===Math.floor(empty/3);
+  const cv=Math.abs(i-empty)===3;
+  if(rv||cv){[puzzleTiles[i],puzzleTiles[empty]]=[puzzleTiles[empty],puzzleTiles[i]];renderPuzzle();}
+}
+
+// SPIN
+const spinItems=['Kiss me 💋','Compliment 💕','Hold hands 🤝','Hug time 🤗','Dance together 💃','Sing a song 🎵','Write a note 📝','Your wish 🌟'];
+const spinColors=['#e8739a','#f4a0be','#c45a80','#ff85a1','#d4539a','#f7b8d0','#e05a8c','#fcd1e0'];
+let spinning=false,wheelAngle=0;
+function drawWheel(angle=0){
+  const c=document.getElementById('wheel-canvas');if(!c)return;
+  const ctx=c.getContext('2d'),cx=150,cy=150,r=140,n=spinItems.length,arc=2*Math.PI/n;
+  ctx.clearRect(0,0,300,300);
+  for(let i=0;i<n;i++){
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,angle+i*arc,angle+(i+1)*arc);ctx.closePath();
+    ctx.fillStyle=spinColors[i];ctx.fill();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(angle+i*arc+arc/2);
+    ctx.fillStyle='#fff';ctx.font='bold 12px Inter,sans-serif';ctx.textAlign='right';
+    ctx.fillText(spinItems[i].split(' ')[0],r-8,4);ctx.restore();
+  }
+  ctx.beginPath();ctx.arc(cx,cy,20,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();
+  ctx.beginPath();ctx.moveTo(cx+20,cy);ctx.lineTo(cx,cy-r-10);ctx.lineTo(cx-20,cy);ctx.fillStyle='#c45a80';ctx.fill();
+}
+function doSpin(){
+  if(spinning)return;spinning=true;
+  document.getElementById('spin-btn').disabled=true;document.getElementById('spin-result').textContent='';
+  let vel=0.3+Math.random()*0.2,totalAngle=0,maxA=(8+Math.random()*6)*2*Math.PI;
+  function animate(){
+    wheelAngle+=vel;totalAngle+=vel;vel*=0.993;drawWheel(wheelAngle);
+    if(totalAngle<maxA){requestAnimationFrame(animate);}
+    else{
+      spinning=false;document.getElementById('spin-btn').disabled=false;
+      const n=spinItems.length,arc=2*Math.PI/n;
+      const norm=((2*Math.PI-wheelAngle%(2*Math.PI))%(2*Math.PI));
+      const idx=Math.floor(norm/arc)%n;
+      document.getElementById('spin-result').textContent='Challenge: '+spinItems[idx];
+      showToast('🎡 '+spinItems[idx]);
+    }
+  }
+  animate();
+}
+
+/* ──────────────────────────────
+   INIT
+─────────────────────────────── */
+(function init(){
+  document.getElementById('start-date-display').textContent=
+    new Date(state.startDate+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('couple-name-disp').textContent=state.coupleName;
+})();
+</script>
+</body>
+</html>
